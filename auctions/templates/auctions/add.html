@@ -1,0 +1,13 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+<form autocomplete="off" action="{% url 'add' %}" method="POST">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="btn btn-secondary button">Submit</button>
+    </div>
+</form>
+
+{% endblock %}
+

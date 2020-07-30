@@ -1,0 +1,98 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+
+
+
+<div>
+    <div class="row h-50">
+        <div class="col-5 container">
+            <div class="container">
+                <h1>{{ listing.title }}</h1>
+                <img class="productFoto align-middle" src="{{ listing.photo }}" alt="">
+                
+            </div>
+        </div>
+        <div class="col-7 container">
+            <h3>Details</h3>
+            <p>{{ listing.description }}</p>
+            <ul>
+                <li>
+                    <p>Listed By:{{ listing.user }}</p>
+                </li>
+                <li>
+                    <p>Category: {{ listing.category }}</p>
+                </li>
+                <li>
+                    <p>Created: {{ listing.date }}</p>
+                </li>
+            </ul>
+            {% if lastBid is None %}
+            <h3>Starting Price ${{ lastBid }}</h3>
+            {% else %}
+            <h3>Highest Bid ${{ lastBid }}</h3>
+            {% endif %}
+            <form class="bid" autocomplete="off" action="{% url 'product' listing.id %}" method="POST">
+                <div class="input-group mb-3">
+                    {% csrf_token %}
+                    {{ form.bids }}
+                    <div class="input-group-append">
+                      <button class="btn btn-secondary" type="submit">Bid</button>
+                    </div>
+                </div>
+            </form>
+            {% if listing.watchlist is False %}
+            <form autocomplete="off" action="{% url 'addWatchList' listing.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary button">Add to Watchlist</button>
+            </form>
+            {% else %}
+            <form autocomplete="off" action="{% url 'removeWatchList' listing.id %}" method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-secondary button">Remove from Watchlist</button>
+            </form>
+            {% endif %}
+            {% if request.user.id is listing.user.id and listing.active is True %}
+
+                <form autocomplete="off" action="{% url 'endBid' listing.id %}" method="POST">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-secondary button">End Bid</button>
+                </form>
+                
+            {% elif request.user.id is listing.user.id and listing.active is False %}
+                
+                   <p class="text" style="margin-top: 10px;"> This listed has ended and the winner was {{ winner }} </p>
+
+            {% endif %}
+
+
+
+        </div>
+    </div>
+    </div>
+    <div class="row h-25">
+        <div class="col-6 container-fluid">
+        <form id="formComment" autocomplete="off" class="comment" action="{% url 'addComment' listing.id %}" method="POST">
+            {% csrf_token %}
+            {{ formComment }}
+            <button id="submit" type="submit" class="btn btn-secondary button">Comment</button>
+        </form>
+
+        </div>
+        <div class="col-6 container-fluid commentList">
+            <h5 class="title">Comments</h5>
+            <div class="inbox">
+                <ul class="text">
+                    {% for comment in comments %}
+                    <li>
+                        <p>{{ comment.comments }}</p> 
+                        <p class="pie"> Posted on {{ comment.date }} </p>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

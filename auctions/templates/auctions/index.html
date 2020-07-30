@@ -1,0 +1,31 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+    <h2>Active Listings</h2>
+    <div>
+        
+        <ul>
+            {% for list in listing %}
+            {% if list.active is True %}
+            <li class="container-fluid product">
+                <div class="row element">
+                    <div class="col-4 container align-middle">
+                        <div class="container-foto align-middle">
+                            <img class="foto align-middle" src="{{ list.photo }}" alt="">
+                        </div>
+                    </div>
+                    <div class="col-8 texto">
+                        <a class="nav-link" href="{% url 'product' list.id %}"><h3>Product: {{ list.title }}</h3></a>
+                        <p class="text">Bidding at: ${{ list.currentBid }}</p>
+
+                        <p class="text">Listed on : {{ list.date }}</p>
+                        <p class="text">Description:{{ list.description }}</p>
+                    </div>
+                </div>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        
+    </div>
+{% endblock %}

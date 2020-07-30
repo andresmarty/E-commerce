@@ -1,0 +1,26 @@
+{% extends "auctions/layout.html" %}
+
+{% block body %}
+<div>
+        
+    <ul>
+        {% for list in listings %}
+        <li class="container-fluid product">
+                <div class="row element">
+                    <div class="col-4 container align-middle">
+                        <div class="container-foto align-middle">
+                            <img class="foto" src="{{ list.photo }}" alt="">
+                        </div>
+                    </div>
+                    <div class="col-8 texto">
+                        <a class="nav-link" href="{% url 'product' list.id %}"><h3>Product: {{ list.title }}</h3></a>
+                        <p class="text">Listed on : {{ list.date }}</p>
+                        <p class="text">Description:{{ list.description }}</p>
+                    </div>
+                </div>
+        </li>
+        {% endfor %}
+    </ul>
+    
+</div>
+{% endblock %}
